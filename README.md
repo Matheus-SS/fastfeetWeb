@@ -1,6 +1,8 @@
 # fastfeetWeb
 backend e frontend web da aplicação fastfeet, que é uma aplicação sobre o controle de uma transportadora.
 
+COMO INSTALAR E RODAR A APLICAÇÃO NA SUA MAQUINA
+
 Você precisará ter instalado na sua máquina o Node.js, o Yarn e o Docker e o Postbird. Feitas as configurações, seguem os passos para executar o backend da aplicação:
 
 
@@ -40,9 +42,18 @@ Execute yarn queue para que a fila de processamento de emails esteja funcionando
 Execute as migrations para que as tabelas sejam criadas:
 
 yarn sequelize db:migrate
-Se quiser, também pode gerar alguns dados, como usuário administrador e planos, executando os seeds:
+
+Se você você no Postbird agora verá que seu os campos da tabela foram criados.
+Clique na tabela orders e na coluna Constraints delete a linha "orders_deliveryman_id_fkey" (se não deletar esta linha ocorre um bug ao deletar algum entregador com encomenda cadastrada)
 
 yarn sequelize db:seed:all
 Com isso, você terá um usuário administrador com email admin@fastfeet.com e a senha 123456 para fazer autenticação.
 
-Após isso, execute yarn dev para que o backend esteja funcionando.
+Após isso, execute "yarn dev" (sem as aspas) para que o backend esteja funcionando.
+
+Agora será a parte do frontend, essa parte é mais simples.
+Faremos como no inicio, clique com o botão direito em cima da pasta frontend e depois clique na opção Open in Terminal. Aparecerá um terminal na parte baixo referente a esta pasta.
+
+Digite o comando yarn para fazer o dowload de todas as dependências necessárias para executar o projeto;
+
+
