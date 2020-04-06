@@ -5,7 +5,7 @@ backend e frontend web da aplicação fastfeet, que é uma aplicação sobre o c
 
 - Cadastro/Edição/Listagem/exclusão de Entregadores
 - Cadastro/Edição/Listagem/exclusão de Encomendas
-- Listagem/Cancelamento de Entregas
+- Cancelamento de Entregas
 - Cadastro/Edição/Listagem/exclusão de Destinatários
 
 
