@@ -52,7 +52,7 @@ Ficará assim:
  clique em Test Connection e se tudo deu certo aparecerá uma mensagem dizendo que a conexão foi um sucesso.
  Clique em **connect** e em **Select database** clique em **Create Database** e dê o nome de **FastFeet**.
  
-Digite o comando `yarn` para fazer o dowload de todas as dependências necessárias para executar o projeto;
+Digite o comando `yarn` para fazer o dowload de todas as dependências necessárias para executar o projeto.
 
 Execute `yarn queue` para que a fila de processamento de emails esteja funcionando.(caso você não tenha adicionado as configs de email em .env irá executar mas não enviará nenhum email)
 
