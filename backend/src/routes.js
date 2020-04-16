@@ -12,6 +12,7 @@ import PendingDeliveryController from './app/controllers/PendingDeliveryControll
 import DeliveriesController from './app/controllers/DeliveriesController';
 import WithdrawDeliveryController from './app/controllers/WithdrawDeliveryController';
 import ProblemController from './app/controllers/ProblemController';
+import SessionDeliverymanController from './app/controllers/SessionDeliverymanController';
 
 import authenticationMiddleware from './app/middlewares/authentication';
 
@@ -20,6 +21,7 @@ const upload = multer(multerConfig);
 
 routes.post('/user', UserController.store);
 routes.post('/session', SessionController.store);
+routes.post('/session/deliveryman', SessionDeliverymanController.store);
 
 routes.get(
   '/deliveryman/:deliverymanId/pendingDeliveries',

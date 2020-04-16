@@ -1,53 +1,86 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
+import {format, parseISO} from 'date-fns';
+import pt from 'date-fns/locale/pt';
+import {Button} from 'react-native';
+import {initialLetter} from '~/utils/formatName';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import Order from '~/components/Order';
+
+import {
+  Container,
+  Header,
+  Profile,
+  Avatar,
+  Info,
+  Title,
+  Name,
+  LogoutButton,
+  DeliveryTitleStatus,
+  DeliveryStatus,
+  List,
+} from './styles';
 import api from '~/services/api';
 
-import Background from '~/components/Background';
-import Appointment from '~/components/Appointment';
-
-import {Container, Title, List} from './styles';
-
-const data = [1, 2, 3, 4, 5];
-
 export default function Dashboard() {
-  const [appointments, setAppointments] = useState([]);
+  const profile = useSelector((state) => state.user.profile);
+
+  const [orders, setOrder] = useState([]);
+
+  async function loadOrder() {
+    const response = await api.get(
+      `/deliveryman/${profile.id}/pendingDeliveries`,
+    );
+
+    const data = response.data.map((order) => ({
+      ...order,
+      dateFormatted:
+        order.start_date &&
+        format(parseISO(order.start_date), 'dd/MM/yyyy', {
+          locale: pt,
+        }),
+    }));
+
+    setOrder(data);
+  }
 
   useEffect(() => {
-    async function loadAppointments() {
-      const response = await api.get('appointments');
-
-      setAppointments(response.data);
-    }
-
-    loadAppointments();
+    loadOrder();
   }, []);
 
-  async function handleCancel(id) {
-    const response = await api.delete(`appointments/${id}`);
-
-    setAppointments(
-      appointments.map((appointment) =>
-        appointment.id === id
-          ? {
-              ...appointment,
-              canceled_at: response.data.canceled_at,
-            }
-          : appointment,
-      ),
-    );
-  }
   return (
-    <Background>
-      <Container>
-        <Title>Agendamentos</Title>
+    <Container>
+      <Header>
+        <Profile>
+          <Avatar
+            source={{
+              uri: 'https://api.adorable.io/avatar/50/guinho.png',
+            }}
+          />
+          <Info>
+            <Title>Bem Vindo de volta,</Title>
+            <Name>{profile.name}</Name>
+          </Info>
+        </Profile>
+        <LogoutButton>
+          <Icon name="exit-to-app" size={20} color="#E74040" />
+        </LogoutButton>
+      </Header>
 
-        <List
-          data={appointments}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({item}) => (
-            <Appointment onCancel={() => handleCancel(item.id)} data={item} />
-          )}
-        />
-      </Container>
-    </Background>
+      <Header>
+        <Name>Entregas</Name>
+        <DeliveryTitleStatus>
+          <DeliveryStatus>Pendentes</DeliveryStatus>
+          <DeliveryStatus>Entregues</DeliveryStatus>
+        </DeliveryTitleStatus>
+      </Header>
+      <List
+        data={orders}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({item}) => <Order data={item} />}
+      />
+    </Container>
   );
 }

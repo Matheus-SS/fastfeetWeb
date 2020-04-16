@@ -39,30 +39,30 @@ class WithdrawDeliveryController {
 
     const searchDate = Number(date);
 
-    const schedule = ['08:00', '18:00'];
+    // const schedule = ['08:00', '18:00'];
 
-    // format schedule to a valid date
-    const available = schedule.map(time => {
-      const [hour, minute] = time.split(':');
-      const value = setSeconds(
-        setMinutes(setHours(searchDate, hour), minute),
-        0
-      );
-      return format(value, "yyyy-MM-dd'T'HH:mm:ssxxx");
-    });
+    // // format schedule to a valid date
+    // const available = schedule.map(time => {
+    //   const [hour, minute] = time.split(':');
+    //   const value = setSeconds(
+    //     setMinutes(setHours(searchDate, hour), minute),
+    //     0
+    //   );
+    //   return format(value, "yyyy-MM-dd'T'HH:mm:ssxxx");
+    // });
 
-    /**Return true if the interval is between the first
-     and end date of schedule **/
-    const result = isWithinInterval(searchDate, {
-      start: parseISO(available[0]),
-      end: parseISO(available[1]),
-    });
+    // /**Return true if the interval is between the first
+    //  and end date of schedule **/
+    // const result = isWithinInterval(searchDate, {
+    //   start: parseISO(available[0]),
+    //   end: parseISO(available[1]),
+    // });
 
-    if (!result) {
-      return res
-        .status(400)
-        .json({ error: 'Pick-up time between 08:00 and 18:00' });
-    }
+    // if (!result) {
+    //   return res
+    //     .status(400)
+    //     .json({ error: 'Pick-up time between 08:00 and 18:00' });
+    // }
 
     order.start_date = req.body.start_date;
 
