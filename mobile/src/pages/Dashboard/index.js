@@ -1,35 +1,52 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
-import {format, parseISO} from 'date-fns';
-import pt from 'date-fns/locale/pt';
-import {Button} from 'react-native';
-import {initialLetter} from '~/utils/formatName';
+import {View, Text} from 'react-native';
 
+import {useSelector, useDispatch} from 'react-redux';
+
+import {initialLetter} from '~/utils/formatName';
+import Order from '~/components/Order';
+import api from '~/services/api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import Order from '~/components/Order';
+import {format, parseISO} from 'date-fns';
+import pt from 'date-fns/locale/pt';
+
+import {signOut} from '~/store/modules/auth/actions';
 
 import {
   Container,
   Header,
   Profile,
+  AvatarInitials,
   Avatar,
   Info,
   Title,
+  ButtonStatus,
   Name,
   LogoutButton,
   DeliveryTitleStatus,
   DeliveryStatus,
   List,
 } from './styles';
-import api from '~/services/api';
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
+
   const profile = useSelector((state) => state.user.profile);
+
+  const image_url = profile.avatar && profile.avatar.url;
+  const image_url_formatted =
+    image_url && image_url.replace('localhost', '10.0.2.2');
 
   const [orders, setOrder] = useState([]);
 
+  const [pending, setPending] = useState(true);
+  const [deliveries, setDeliveries] = useState(false);
+
   async function loadOrder() {
+    setPending(true);
+    setDeliveries(false);
+
     const response = await api.get(
       `/deliveryman/${profile.id}/pendingDeliveries`,
     );
@@ -42,7 +59,6 @@ export default function Dashboard() {
           locale: pt,
         }),
     }));
-
     setOrder(data);
   }
 
@@ -50,21 +66,49 @@ export default function Dashboard() {
     loadOrder();
   }, []);
 
+  async function loadOrderDelivery() {
+    setDeliveries(true);
+    setPending(false);
+
+    const response = await api.get(`/deliveryman/${profile.id}/deliveries`);
+
+    const data = response.data.map((order) => ({
+      dateFormatted:
+        order.start_date &&
+        format(parseISO(order.start_date), 'dd/MM/yyyy', {
+          locale: pt,
+        }),
+      ...order,
+    }));
+
+    setOrder(data);
+  }
+
+  function SingOut() {
+    dispatch(signOut());
+  }
+
   return (
     <Container>
       <Header>
         <Profile>
-          <Avatar
-            source={{
-              uri: 'https://api.adorable.io/avatar/50/guinho.png',
-            }}
-          />
+          {profile.avatar ? (
+            <Avatar source={{uri: image_url_formatted}} />
+          ) : (
+            <AvatarInitials>
+              <Text
+                style={{fontWeight: 'bold', fontSize: 25, color: '#A28FD0'}}>
+                {initialLetter(profile.name)}
+              </Text>
+            </AvatarInitials>
+          )}
+
           <Info>
             <Title>Bem Vindo de volta,</Title>
             <Name>{profile.name}</Name>
           </Info>
         </Profile>
-        <LogoutButton>
+        <LogoutButton onPress={SingOut}>
           <Icon name="exit-to-app" size={20} color="#E74040" />
         </LogoutButton>
       </Header>
@@ -72,15 +116,26 @@ export default function Dashboard() {
       <Header>
         <Name>Entregas</Name>
         <DeliveryTitleStatus>
-          <DeliveryStatus>Pendentes</DeliveryStatus>
-          <DeliveryStatus>Entregues</DeliveryStatus>
+          <ButtonStatus onPress={loadOrder} status={pending}>
+            <DeliveryStatus status={pending}>Pendentes</DeliveryStatus>
+          </ButtonStatus>
+          <ButtonStatus onPress={loadOrderDelivery} status={deliveries}>
+            <DeliveryStatus status={deliveries}>Entregues</DeliveryStatus>
+          </ButtonStatus>
         </DeliveryTitleStatus>
       </Header>
-      <List
-        data={orders}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({item}) => <Order data={item} />}
-      />
+
+      {orders.length !== 0 ? (
+        <List
+          data={orders}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({item}) => <Order data={item} onLoadOrder={loadOrder} />}
+        />
+      ) : (
+        <View>
+          <Title style={{color: 'red'}}>NADA ENCONTRADO</Title>
+        </View>
+      )}
     </Container>
   );
 }

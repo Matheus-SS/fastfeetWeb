@@ -45,7 +45,7 @@ export const CircleStatus = styled.View`
   width: 18px;
   border-radius: 9px;
   border: 2px solid #7d40e7;
-  background: #fff;
+  background: ${(props) => (props.labelStatus ? '#7d40e7' : '#fff')};
 `;
 
 export const BoxLabel = styled.View``;

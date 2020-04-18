@@ -18,6 +18,7 @@ class PendingDeliveryController {
           },
         },
       },
+      order: [['id', 'ASC']],
       attributes: [
         'id',
         'product_name',

@@ -28,11 +28,12 @@ class SessionDeliverymanController {
       return res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    const { name, email, avatar } = deliveryman;
+    const { name, email, avatar, createdAt } = deliveryman;
 
     return res.json({
       user: {
         id,
+        createdAt,
         name,
         email,
         avatar,

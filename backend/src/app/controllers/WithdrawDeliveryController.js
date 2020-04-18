@@ -64,6 +64,10 @@ class WithdrawDeliveryController {
     //     .json({ error: 'Pick-up time between 08:00 and 18:00' });
     // }
 
+    if (order.start_date) {
+      return res.status(400).json({ error: 'encomenda já retirada' });
+    }
+
     order.start_date = req.body.start_date;
 
     await order.save();

@@ -1,6 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '~/services/api';
+import {Alert} from 'react-native';
+import {format, parseISO} from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import {
   Container,
@@ -20,15 +23,24 @@ import {
   DetailsLink,
 } from './styles';
 
-export default function Order({data}) {
-  const [date, setDate] = useState(data.start_date);
+export default function Order({data, onLoadOrder}) {
+  const [date, setDate] = useState(data.dateFormatted);
 
-  async function handle() {
-    await api.post(`delivery/${data.id}/withdraw`, {
-      start_date: new Date(),
-    });
+  async function handleWithdraw() {
+    try {
+      await api.post(`delivery/${data.id}/withdraw`, {
+        start_date: new Date(),
+      });
+
+      Alert.alert('Sucesso!!!', 'Retirada concluída');
+      onLoadOrder();
+    } catch (err) {
+      Alert.alert(
+        'Erro ao fazer retirada!!!',
+        'Verifique se: Está no horário permitido. Se já fez o máximo de retiradas diárias ou se já retirou a encomenda.',
+      );
+    }
   }
-
   return (
     <Container>
       <Top>
@@ -40,21 +52,21 @@ export default function Order({data}) {
         <Line></Line>
 
         <Box>
-          <CircleStatus></CircleStatus>
+          <CircleStatus labelStatus={data.id}></CircleStatus>
           <BoxLabel>
             <Label>Aguardando Retirada</Label>
           </BoxLabel>
         </Box>
 
         <Box>
-          <CircleStatus></CircleStatus>
+          <CircleStatus labelStatus={data.start_date}></CircleStatus>
           <BoxLabel>
             <Label>Retirada</Label>
           </BoxLabel>
         </Box>
 
         <Box>
-          <CircleStatus></CircleStatus>
+          <CircleStatus labelStatus={data.end_date}></CircleStatus>
           <BoxLabel>
             <Label>Entregue</Label>
           </BoxLabel>
@@ -66,10 +78,10 @@ export default function Order({data}) {
           {date ? (
             <>
               <Info>Data</Info>
-              <Details>{data.dateFormatted}</Details>
+              <Details>{date}</Details>
             </>
           ) : (
-            <ButtonDetails onPress={handle}>
+            <ButtonDetails onPress={handleWithdraw}>
               <DetailsLink>Retirar encomenda</DetailsLink>
             </ButtonDetails>
           )}
@@ -77,7 +89,7 @@ export default function Order({data}) {
 
         <BoxDetails>
           <Info>Cidade</Info>
-          <Details>São pedro da aldeiafdfdfeefefsfe</Details>
+          <Details>{data.recipient.city}</Details>
         </BoxDetails>
 
         <ButtonDetails>
