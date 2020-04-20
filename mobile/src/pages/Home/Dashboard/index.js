@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
+import {withNavigationFocus} from '@react-navigation/compat';
 
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -29,7 +30,7 @@ import {
   List,
 } from './styles';
 
-export default function Dashboard() {
+function Dashboard({navigation, isFocused}) {
   const dispatch = useDispatch();
 
   const profile = useSelector((state) => state.user.profile);
@@ -63,8 +64,10 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    loadOrder();
-  }, []);
+    if (isFocused) {
+      loadOrder();
+    }
+  }, [isFocused]);
 
   async function loadOrderDelivery() {
     setDeliveries(true);
@@ -90,6 +93,8 @@ export default function Dashboard() {
 
   return (
     <Container>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+
       <Header>
         <Profile>
           {profile.avatar ? (
@@ -129,7 +134,13 @@ export default function Dashboard() {
         <List
           data={orders}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({item}) => <Order data={item} onLoadOrder={loadOrder} />}
+          renderItem={({item}) => (
+            <Order
+              data={item}
+              onLoadOrder={loadOrder}
+              navigation={navigation}
+            />
+          )}
         />
       ) : (
         <View>
@@ -139,3 +150,5 @@ export default function Dashboard() {
     </Container>
   );
 }
+
+export default withNavigationFocus(Dashboard);

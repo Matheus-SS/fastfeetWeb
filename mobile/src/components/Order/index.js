@@ -1,9 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '~/services/api';
 import {Alert} from 'react-native';
-import {format, parseISO} from 'date-fns';
-import pt from 'date-fns/locale/pt';
 
 import {
   Container,
@@ -23,7 +21,7 @@ import {
   DetailsLink,
 } from './styles';
 
-export default function Order({data, onLoadOrder}) {
+export default function Order({data, onLoadOrder, navigation}) {
   const [date, setDate] = useState(data.dateFormatted);
 
   async function handleWithdraw() {
@@ -92,7 +90,8 @@ export default function Order({data, onLoadOrder}) {
           <Details>{data.recipient.city}</Details>
         </BoxDetails>
 
-        <ButtonDetails>
+        <ButtonDetails
+          onPress={() => navigation.navigate('Details', {data: data})}>
           <DetailsLink>Ver detalhes</DetailsLink>
         </ButtonDetails>
       </Bottom>

@@ -1,4 +1,5 @@
 # fastfeetWeb
+
 backend e frontend web da aplicação fastfeet, que é uma aplicação sobre o controle de uma transportadora.
 
 # :star: Funcionalidades
@@ -8,22 +9,20 @@ backend e frontend web da aplicação fastfeet, que é uma aplicação sobre o c
 - Cancelamento de Entregas
 - Cadastro/Edição/Listagem/exclusão de Destinatários
 
-
 # :gear: Tecnologias
 
- - ReactJS
- - Node.js
- - Postgres
- - Sequelize
- - Styled-Components
- - Redux/Sagas
+- ReactJS
+- Node.js
+- Postgres
+- Sequelize
+- Styled-Components
+- Redux/Sagas
 
 ## COMO INSTALAR E RODAR A APLICAÇÃO NA SUA MAQUINA
 
 Você precisará ter instalado na sua máquina o Node.js, o Yarn e o Docker e o Postbird. Feitas as configurações, seguem os passos para executar o backend da aplicação:
 
-
-Iremos instalar duas imagens de dois bancos de dados: Postgres, para armazenar nossas tabelas; e o Redis, que será utilizado para envio de e-mails com filas e o  editor de código será o VsCode. Abaixo, seguem os respectivos comandos para realizar o download:
+Iremos instalar duas imagens de dois bancos de dados: Postgres, para armazenar nossas tabelas; e o Redis, que será utilizado para envio de e-mails com filas e o editor de código será o VsCode. Abaixo, seguem os respectivos comandos para realizar o download:
 
 Abra a sua pasta no vscode onde contem a pasta backend e frontend. Primeiro iremos resolver o backend.
 
@@ -44,14 +43,15 @@ Dentro desse nosso arquivo **.env** terá algumas configurações para o envio d
 
 Depois de baixado e instalado o Postbird. Abra-o e aparecerá alguns campos para preenchermos.
 Ficará assim:
- - Host: localhost
- - Port:5432
- - Username:postgres
- - Password:docker
- 
- clique em Test Connection e se tudo deu certo aparecerá uma mensagem dizendo que a conexão foi um sucesso.
- Clique em **connect** e em **Select database** clique em **Create Database** e dê o nome de **FastFeet**.
- 
+
+- Host: localhost
+- Port:5432
+- Username:postgres
+- Password:docker
+
+clique em Test Connection e se tudo deu certo aparecerá uma mensagem dizendo que a conexão foi um sucesso.
+Clique em **connect** e em **Select database** clique em **Create Database** e dê o nome de **FastFeet**.
+
 Digite o comando `yarn` para fazer o dowload de todas as dependências necessárias para executar o projeto.
 
 Execute `yarn queue` para que a fila de processamento de emails esteja funcionando.(caso você não tenha adicionado as configs de email em .env irá executar mas não enviará nenhum email)
@@ -65,15 +65,21 @@ Clique na tabela orders e na coluna Constraints delete a linha "orders_deliverym
 
 - yarn sequelize db:seed:all
 
-*Com isso, você terá um usuário administrador com email admin@fastfeet.com e a senha 123456 para fazer autenticação.*
+_Com isso, você terá um usuário administrador com email admin@fastfeet.com e a senha 123456 para fazer autenticação._
 
 Após isso, execute `yarn dev` para que o backend esteja funcionando.
 
-Agora será a parte do frontend, essa parte é mais simples.
+Agora será a parte do frontend e do mobile, essa parte é mais simples.
 Faremos como no inicio, clique com o botão direito em cima da pasta frontend e depois clique na opção **Open in Terminal**. Aparecerá um terminal na parte baixo referente a esta pasta.
 
 Digite o comando `yarn` para fazer o dowload de todas as dependências necessárias para executar o projeto;
 
 Digite `yarn start` abrirá uma aba para digitarmos nosso email e senha.
 
+No mobile clique com o botão direito em cima da pasta mobile e depois clique na opção **Open in Terminal**. Aparecerá um terminal na parte baixo referente a esta pasta.
 
+Digite o comando `yarn` para fazer o dowload de todas as dependências necessárias para executar o projeto;
+
+Digite `react-native run-android` e executará o projeto.
+
+> Ps.: A parte de enviar a foto no mobile não está funcionando, tem como mostrar o que está errado?

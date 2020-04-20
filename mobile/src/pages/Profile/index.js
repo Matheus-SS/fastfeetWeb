@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Button} from 'react-native';
+import {Text, StatusBar} from 'react-native';
 
 import {signOut} from '~/store/modules/auth/actions';
 import {useSelector, useDispatch} from 'react-redux';
@@ -39,6 +39,8 @@ export default function Profile() {
 
   return (
     <Container>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+
       <PictureProfile>
         {profile.avatar ? (
           <Avatar source={{uri: image_url_formatted}} />

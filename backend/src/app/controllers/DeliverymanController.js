@@ -41,7 +41,6 @@ class DeliverymanController {
         name,
         avatar_id,
         email,
-        created_at,
       },
     });
   }

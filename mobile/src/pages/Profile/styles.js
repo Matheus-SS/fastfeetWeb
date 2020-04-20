@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   flex: 1;
   justify-content: center;
+  background: #fff;
 `;
 export const PictureProfile = styled.View`
   flex-direction: row;

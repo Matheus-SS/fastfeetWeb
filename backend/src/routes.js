@@ -19,6 +19,8 @@ import authenticationMiddleware from './app/middlewares/authentication';
 const routes = new Router();
 const upload = multer(multerConfig);
 
+routes.post('/files', upload.single('file'), FileController.store);
+
 routes.post('/user', UserController.store);
 routes.post('/session', SessionController.store);
 routes.post('/session/deliveryman', SessionDeliverymanController.store);
@@ -50,8 +52,6 @@ routes.put('/recipient/:id', RecipientController.update);
 routes.get('/recipient', RecipientController.index);
 routes.get('/recipient/:id', RecipientController.show);
 routes.delete('/recipient/:id', RecipientController.delete);
-
-routes.post('/files', upload.single('file'), FileController.store);
 
 routes.post('/deliveryman', DeliverymanController.store);
 routes.put('/deliveryman/:id', DeliverymanController.update);
